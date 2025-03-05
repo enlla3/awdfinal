@@ -21,9 +21,10 @@
     </div>
 </div>
 <script>
+    const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
     const courseId = "{{ course.id }}";
     const chatSocket = new WebSocket(
-        'ws://' + window.location.host + '/ws/course_chat/' + courseId + '/'
+    ws_scheme + '://' + window.location.host + '/ws/course_chat/' + courseId + '/'
     );
 
     chatSocket.onmessage = function(e) {
