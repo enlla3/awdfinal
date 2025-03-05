@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <h2>{{ profile_user.username }}'s Public Profile</h2>
+  <p><strong>Real Name:</strong> {{ profile_user.real_name }}</p>
+  <p><strong>Role:</strong> {{ profile_user.get_role_display }}</p>
+  {% if profile_user.photo %}
+    <img src="{{ profile_user.photo.url }}" alt="Profile Photo" class="profile-photo">
+  {% endif %}
+
+  <h3>
+    {% if profile_user.role == 'teacher' %}
+      Created Courses:
+    {% else %}
+      Enrolled Courses:
+    {% endif %}
+  </h3>
+  <ul>
+    {% for course in courses %}
+      <li>
+        <a href="{% url 'courses:course_detail' course.id %}">{{ course.title }}</a>
+      </li>
+    {% empty %}
+      <li>No courses available.</li>
+    {% endfor %}
+  </ul>
+
+  <h3>Status Updates</h3>
+  <ul>
+    {% for status in statuses %}
+      <li>
+        {{ status.content }}
+        <small>({{ status.created_at|date:"Y-m-d H:i" }})</small>
+      </li>
+    {% empty %}
+      <li>No status updates available.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

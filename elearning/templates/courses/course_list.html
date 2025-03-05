@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+    <h2>Courses</h2>
+    <ul class="course-list">
+        {% for course in courses %}
+            <li><a href="{% url 'courses:course_detail' course.id %}">{{ course.title }}</a></li>
+        {% endfor %}
+    </ul>
+    {% if user.role == 'teacher' %}
+        <a href="{% url 'courses:add_course' %}" class="btn">Add Course</a>
+    {% endif %}
+</div>
+{% endblock %}

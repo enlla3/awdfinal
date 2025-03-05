@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+    <h2>Welcome, {{ user.username }}!</h2>
+    <p><strong>Real Name:</strong> {{ user.real_name }}</p>
+    <p><strong>Role:</strong> {{ user.get_role_display }}</p>
+    {% if user.photo %}
+        <img src="{{ user.photo.url }}" alt="Profile Photo" class="profile-photo">
+    {% endif %}
+    <div class="dashboard-links">
+        <a href="{% url 'courses:course_list' %}" class="btn">View Courses</a>
+        <a href="{% url 'accounts:search_users' %}" class="btn">Search Users</a>
+    </div>
+    <h3>Status Updates</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Post Update</button>
+    </form>
+    <div class="status-updates">
+        {% for status in statuses %}
+            <div class="status-card">
+                <p>{{ status.content }}</p>
+                <small>Posted on {{ status.created_at }}</small>
+            </div>
+        {% empty %}
+            <p>No status updates yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

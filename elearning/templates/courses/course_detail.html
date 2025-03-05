@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+    <h2>{{ course.title }}</h2>
+    <p>{{ course.description }}</p>
+    <p>Teacher:
+      <a href="{% url 'accounts:public_profile' course.teacher.username %}">
+        {{ course.teacher.username }}
+      </a>
+    </p>
+
+    {% if user.role == 'student' and user not in course.enrolled_students.all %}
+        <a href="{% url 'courses:enroll_course' course.id %}" class="btn">Enroll in this Course</a>
+    {% endif %}
+
+    <h3>Materials</h3>
+    <ul class="materials-list">
+        {% for material in materials %}
+            <li><a href="{{ material.file.url }}">Download Material</a> ({{ material.uploaded_at }})</li>
+        {% endfor %}
+    </ul>
+    {% if user == course.teacher %}
+        <a href="{% url 'courses:upload_material' course.id %}" class="btn">Upload Material</a>
+    {% endif %}
+    {% if user == course.teacher or user in course.enrolled_students.all %}
+      <a href="{% url 'chat:course_chat_room' course.id %}" class="btn">Go to Course Chat Room</a>
+    {% endif %}
+
+    <h3>Feedback</h3>
+    <ul class="feedback-list">
+        {% for fb in feedbacks %}
+            <li><strong>{{ fb.student.username }}:</strong> {{ fb.comment }} <em>({{ fb.created_at }})</em></li>
+        {% endfor %}
+    </ul>
+    {% if user.role == 'student' %}
+        <a href="{% url 'courses:add_feedback' course.id %}" class="btn">Leave Feedback</a>
+    {% endif %}
+
+    {% if user == course.teacher %}
+      <h3>Enrolled Students</h3>
+      <ul class="students-list">
+          {% for student in course.enrolled_students.all %}
+            <li>
+              <a href="{% url 'accounts:public_profile' student.username %}">
+                {{ student.username }}
+              </a>
+              - <a href="{% url 'courses:remove_student' course.id student.id %}" class="btn small">Remove</a>
+              <a href="{% url 'courses:block_student' course.id student.id %}" class="btn small">Block</a>
+            </li>
+          {% endfor %}
+      </ul>
+      <h3>Banned Students</h3>
+      <ul class="banned-students-list">
+        {% for banned in course.blocked_students.all %}
+          <li>
+            {{ banned.username }}
+            <a href="{% url 'courses:unblock_student' course.id banned.id %}" class="btn small">Unban</a>
+          </li>
+        {% empty %}
+          <li>No banned students.</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <h2>User Search</h2>
+  <form method="get">
+    <div class="form-group">
+      <label for="id_q">Search Query:</label>
+      <input id="id_q" type="text" name="q" value="{{ query }}" placeholder="Enter name or username">
+    </div>
+    <button type="submit" class="btn">Search</button>
+  </form>
+
+  {% if results is not None %}
+    <h3>Results:</h3>
+    <ul>
+      {% for user in results %}
+        <li>
+          <a href="{% url 'accounts:public_profile' user.username %}">{{ user.username }}</a> - {{ user.real_name }} ({{ user.get_role_display }})
+        </li>
+      {% empty %}
+        <li>No users found.</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+{% endblock %}
