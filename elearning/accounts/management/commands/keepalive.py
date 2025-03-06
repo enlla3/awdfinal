@@ -13,7 +13,7 @@ class Command(BaseCommand):
         # Get website URL from an environment variable; if not set, default to your deployed URL.
         website_url = os.environ.get('WEBSITE_URL', 'https://awdfinal.onrender.com/')
         # Get the Redis URL from an environment variable.
-        redis_url = os.environ.get('REDIS_URL', 'redis://red-cv49d10gph6c73aco630:6379')
+        redis_url = os.environ.get('REDIS_URL', 'rediss://red-cv4erq8gph6c738vacig:bE9rOT7UCCCxpz0jj2SuLWQJB77yE0Nw@singapore-keyvalue.render.com:6379')
 
         self.stdout.write(f"Pinging website: {website_url}")
         self.stdout.write(f"Pinging Redis: {redis_url}")
